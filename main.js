@@ -144,31 +144,54 @@ let counterArray = [];
 
 console.log('ID I liked: ' + counterArray)
 
+
+
+const likeInfinite = document.getElementById('like-infinite');
+let checkVerify = false;
+
+likeInfinite.addEventListener('change', (event) => {
+    if (event.currentTarget.checked) {
+        checkVerify = true;
+    } else if (!event.currentTarget.checked) {
+        checkVerify = false;
+    }
+});
+
 for (let i = 0; i < posts.length; i++) {
     let postID = likeBtn[i].getAttribute('data-postid');
-
+        
     likeBtn[i].addEventListener('click', function(event) {
         event.preventDefault();
+        
+        if (checkVerify == false) {
+            likeBtn[i].classList.remove('like-button-infinite');
 
-        if (!counterArray.includes(postID)) {
-            counterArray.push(postID);
-
-            posts[i]['likes'] = posts[i]['likes'] + 1;
-            likeCounter[i].innerHTML = posts[i]['likes'];
-
-            likeBtn[i].classList.add('like-button--liked');
-        } else {
-            for (let n = 0; n < counterArray.length; n++) {
-                if ( counterArray[n] == postID) { 
-    
-                    counterArray.splice(n, 1); 
+            if (!counterArray.includes(postID)) {
+                counterArray.push(postID);
+            
+                posts[i]['likes'] = posts[i]['likes'] + 1;
+                likeCounter[i].innerHTML = posts[i]['likes'];
+            
+                likeBtn[i].classList.add('like-button--liked');
+            } else if (counterArray.includes(postID)) {
+                for (let n = 0; n < counterArray.length; n++) {
+                    if (counterArray[n] == postID) { 
+                        counterArray.splice(n, 1); 
+                    }
                 }
+            
+                posts[i]['likes'] = posts[i]['likes'] - 1;
+                likeCounter[i].innerHTML = posts[i]['likes'];
+                
+                likeBtn[i].classList.remove('like-button--liked');
             }
 
-            posts[i]['likes'] = posts[i]['likes'] - 1;
+        } else if (checkVerify == true) {
+            posts[i]['likes'] = posts[i]['likes'] + 1;
             likeCounter[i].innerHTML = posts[i]['likes'];
-
+            
             likeBtn[i].classList.remove('like-button--liked');
+            likeBtn[i].classList.add('like-button-infinite');
         }
 
         console.log('ID I liked: ' + counterArray)
