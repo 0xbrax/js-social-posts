@@ -62,53 +62,26 @@ posts.forEach((element) => {
     let newDateFormat = element['created'].substring(8, 10) + '-' + element['created'].substring(5, 7) + '-' + element['created'].substring(0, 4);
     element['created'] = newDateFormat;
 
-    if (element['author']['image'] == null) {
-        const nameArray = element['author']['name'].split(' ');
-        let textProfilePic = '';
-
-        for (let x = 0; x < nameArray.length; x++) {
-            textProfilePic += nameArray[x].charAt(0);
+    function iconProfile() {
+        if (element['author']['image'] == null) {
+            const nameArray = element['author']['name'].split(' ');
+            let textProfilePic = '';
+    
+            for (let x = 0; x < nameArray.length; x++) {
+                textProfilePic += nameArray[x].charAt(0);
+            }
+            return `<div class="profile-pic-default"><span>${textProfilePic}</span></div>`;
+        } else {
+            return `<img class="profile-pic" src="${element['author']['image']}" alt="${element['author']['name']}">`;
         }
+    }
 
-        postContainer.innerHTML += `
-            <div class="post">
-                <div class="post__header">
-                    <div class="post-meta">                    
-                        <div class="post-meta__icon">
-                            <div class="profile-pic-default"><span>${textProfilePic}</span></div>                    
-                        </div>
-                        <div class="post-meta__data">
-                            <div class="post-meta__author">${element['author']['name']}</div>
-                            <div class="post-meta__time">${element['created']}</div>
-                        </div>                    
-                    </div>
-                </div>
-                <div class="post__text">${element['content']}</div>
-                <div class="post__image">
-                    <img src="${element['media']}" alt="">
-                </div>
-                <div class="post__footer">
-                    <div class="likes js-likes">
-                        <div class="likes__cta">
-                            <a class="like-button js-like-button" href="#" data-postid="${element['id']}">
-                                <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
-                                <span class="like-button__label">Mi Piace</span>
-                            </a>
-                        </div>
-                        <div class="likes__counter">
-                            Piace a <b id="like-counter-1" class="js-likes-counter">${element['likes']}</b> persone
-                        </div>
-                    </div> 
-                </div>            
-            </div>
-        `;
-    } else {
-        postContainer.innerHTML += `
+    postContainer.innerHTML += `
         <div class="post">
             <div class="post__header">
                 <div class="post-meta">                    
                     <div class="post-meta__icon">
-                        <img class="profile-pic" src="${element['author']['image']}" alt="${element['author']['name']}">                    
+                        ${iconProfile()}
                     </div>
                     <div class="post-meta__data">
                         <div class="post-meta__author">${element['author']['name']}</div>
@@ -135,16 +108,13 @@ posts.forEach((element) => {
             </div>            
         </div>
     `;
-    }
 });
+
+
 
 let likeBtn = document.querySelectorAll('.js-like-button');
 let likeCounter = document.querySelectorAll('.js-likes-counter');
 let counterArray = [];
-
-console.log('ID I liked: ' + counterArray)
-
-
 
 const likeInfinite = document.getElementById('like-infinite');
 let checkVerify = false;
@@ -156,6 +126,8 @@ likeInfinite.addEventListener('change', (event) => {
         checkVerify = false;
     }
 });
+
+console.log('ID I liked: ' + counterArray)
 
 for (let i = 0; i < posts.length; i++) {
     let postID = likeBtn[i].getAttribute('data-postid');
